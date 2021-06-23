@@ -1,0 +1,119 @@
+---
+title: "Bayesian Statistics 101"
+subtitle: "001 - Introduction to Bayesian Statistics"
+author: "Dan Burrell"
+date: "June 2021"
+institute: "BestStatsLessons"
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/biometRy.css
+      - css/nhsr-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: googlecode
+      highlightLines: true
+      highlightLanguage: ["r"]
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      after_body: [css/insert-logo.html]
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+library(tidyverse)
+library(nhsrtheme)
+# set default options
+opts_chunk$set(echo = FALSE,
+               fig.width = 7.252,
+               fig.height = 4,
+               dpi = 300)
+
+# uncomment the following lines if you want to use the NHS-R theme colours by default
+scale_fill_continuous <- partial(scale_fill_nhs, discrete = FALSE)
+scale_fill_discrete <- partial(scale_fill_nhs, discrete = TRUE)
+scale_colour_continuous <- partial(scale_colour_nhs, discrete = FALSE)
+scale_colour_discrete <- partial(scale_colour_nhs, discrete = TRUE)
+```
+
+class: title-slide, left, bottom
+
+# `r rmarkdown::metadata$title`
+----
+## **`r rmarkdown::metadata$subtitle`**
+### `r rmarkdown::metadata$author`
+### `r rmarkdown::metadata$date`
+
+---
+class: inverse, center, top
+
+# About Me
+<img style="border-radius: 50%;" src="img/DandelbrotAvataar.png" width="170px"/>
+
+----
+
+My name is Dan Burrell. I'm a statistical consultant working broadly in agricultural and food science. I'm passionate about teaching statistical methods for reproducible research in the sciences. That's why I created **BestStatsLessons**.    
+
+In my spare time I spend time with my wife and two children. I like to spend time gardening and cooking. I also enjoy spending time tinkering with computer code. 
+
+----
+<a href="mailto:beststatslessons@gmail.com">Email BestStatsLessons</a>
+
+
+---
+
+# A slide where bullets appear sequentially
+
+--
+
+* first point
+
+--
+
+* second point
+
+--
+
+* third point
+
+???
+This is an example of presenter notes
+---
+
+class: center, middle
+
+# Slide with centered content in the middle
+
+This content is also centered and in the middle of the slide
+
+---
+
+class: center, middle
+
+# Slide with some text aligned
+.left[We can start writing a sentence on the left...]
+.right[and end on the right.]
+
+---
+
+---
+
+.pull-left[
+
+```{r plot-last, echo=TRUE, fig.show = 'hide'}
+# Plot a parabola
+x = seq(-5,5, length.out=100)
+y = x^2
+plot(x, y, type="l")
+```
+]
+.pull-right[
+```{r ref.label = 'plot-last', echo=FALSE}
+```
+]
+
+---
+
