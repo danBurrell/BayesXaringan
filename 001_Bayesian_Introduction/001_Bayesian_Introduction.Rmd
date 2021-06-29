@@ -26,6 +26,10 @@ output:
 library(knitr)
 library(tidyverse)
 library(nhsrtheme)
+library(xaringanExtra)
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+
 # set default options
 opts_chunk$set(echo = FALSE,
                fig.width = 7.252,
@@ -51,7 +55,7 @@ class: title-slide, left, bottom
 class: inverse, center, top
 
 # About Me
-<img style="border-radius: 50%;" src="img/DandelbrotAvataar.png" width="170px"/>
+<img style="border-radius: 50%;" src="img/DandelbrotAvataar.png" width="190px"/>
 
 ----
 
@@ -62,25 +66,389 @@ In my spare time I spend time with my wife and two children. I like to spend tim
 ----
 <a href="mailto:beststatslessons@gmail.com">Email BestStatsLessons</a>
 
+---
+
+class: inverse, center, middle
+
+# Introduction
+
+---
+class: left, top
+
+# What is Bayesian Statistics
+
+First address the question: .red["What is statistics?"]
+
+Although there are many different philosophies underlying various statistical schools of thought, there are really three main statistical branches:
+
+1. Classical/Frequentist
+2. Fiducial
+3. Bayesian
 
 ---
 
-# A slide where bullets appear sequentially
+class: left, top
+
+# Main Statistical Branches
+.panelset[
+.panel[.panel-name[Frequentist]
+
+The traditional approach that's usually taught to undergraduates taking introductory statistics courses. Also the approach found in most textbooks and implemented as standard procedures in most statistical software packages. 
+
+### Key idea:
+Parameters $\theta$ are .red[fixed] values.
+
+### Frequentist inference:
+Frequentist inference is based on the idea that if you could repeat the experiment a large number of times, then:
+
+* .blue[Confidence intervals:] $100(1-\alpha)\%$ of the intervals generated actually capture the true value of the parameter $\theta$.
+* .blue[p-values:] only $p\times 100\%$ of the data sets would exhibit a pattern as strong or stronger than the one found in the observed data set. 
+
+] <!--end of panel-->
+.panel[.panel-name[Fiducial]
+
+Invented by R.A. Fisher to try to get the "good" parts of Bayesian statistics without sacrificing the notion of "objectivity". It's starting to regain popularity. 
+
+### Key idea:
+Parameters $\theta$ are .red[not] really .red[random], but they're also .red[not] really .red[fixed] --- they're something else. 
+
+### Fiducial inference:
+The basic idea is to try to make probability statements about a parameter (a very Bayesian thing to do) without the need to specify a prior probability distribution (which Bayesians must do):
+
+* This would create interval estimates that we can have "faith" in (fiducial is the Latin word meaning faith).
+* Designed to get away from awkward interpretations of frequentist inferences and move closer to a Bayesian approach, but without sacrificing "objective" rigor. 
+
+] <!--end of panel-->
+.panel[.panel-name[Bayesian]
+
+Actually predates frequentist and fiducial approaches but fell out of favour in 1900s. Has regained popularity since the 1980s to 1990s.
+
+### Key idea: 
+Parameters $\theta$ are .red[random] and governed by a probability distribution.
+
+### Bayesian inference:
+
+Seeks to "learn" about a parameter's probability distribution by updating based on observed data:
+
+* Start with .blue[prior distribution] about parameter $\theta$.
+* Update probability distribution for $\theta$ based on observed data $D$.
+* Make inferences using updated distribution for $\theta$, called its .blue[posterior distribution]. 
+
+Usually people find Bayesian statistics (conceptually) easier because there are prescribed steps to follow. Practically though, completing the steps can be a challenge!
+] <!--end of panel-->
+] <!--end of panelset-->
+
+---
+
+class: top, left
+
+# Bayesian Inference
+
+Our main focus is the Bayesian approach, and contrasting it with the frequentist approach.
+
+First we need a solid understanding of what statistics is all about. 
+
+If I asked: .red["What is Statistics?"] I'd probably get answers like the following:
+
+* Data analysis
+* Graphs and visualizations
+* Confidence intervals
+* P-values
+* Analysis of variance (ANOVA)
+* Regression
+* Probability
+* Complicated mathematics and formulas
+
+None of these is really what Statistics is, although certain parts/aspects of Statistics do deal with these things. 
+
+---
+
+# What is Statistics?
+
+One definition that approximately captures what Statistics is all about is as follows:
+
+*"Statistics is the .yellow[PROCESS] of making .blue[DECISIONS] when confronted with .red[UNCERTAINTY]."*
+
+You need to understand that:
+* Statistics is a .green[PROCESS]
+* useful for making .blue[DECISIONS]
+* that are not clear-cut because .red[UNCERTAINTY] is involved!
+
+Let's look more closely at these three components. 
+---
+
+# Process
+
+The most common flavour of the process is the .red[**scientific method**]:
+
+1. .blue[Hypothesis:] a testable question to be answered (Decision)
+2. .blue[Significance Level:] How important is the question under consideration
+3. .blue[Design the Experiment:] Make sure it reflects the Hypothesis and Significance Level and how you will analyze the data (before any data is even collected)
+4. .blue[Decision Rule:] If I see this from the experiment then I decide X; otherwise I decide Y. 
+5. .blue[Conduct Experiment:] Be sure to conduct the experiment exactly as specified in the Experimental Design and analyze the data as specified.
+6. .blue[Decision:] Apply the Decision Rule now that you have collected data according to the Experimental Design; make the decision X or Y. 
+7. .blue[Conclusion:] turn what you've learned (your decision) into words (something that someone else can use)
+8. .blue[Go back to step 1:] All good research ends with a question. 
+
+---
+
+# Decisions
+
+.panelset[
+.panel[.panel-name[Our Focus]
+
+The vast majority of statistical decisions fall into three main decision categories:
+
+1. .blue[Parameter Estimation]
+2. .blue[Hypothesis Testing]
+3. .blue[Prediction]
+
+Each of these decisions can be associated to a particular type of question, and the decision pertains to a particular type of answer. .blue[**If you know the question, then you can bear in mind the type of answer you're looking for.**] 
+
+Note that there are many types of decisions that don't necessarily fall neatly into the above categories. In fact, there is a whole body of work that goes under the headings Decision Theory and Decision Analysis and you can take whole courses devoted to these.
+] <!--end of panel-->
+.panel[.panel-name[Parameter Estimation]
+
+Associated with the basic question: 
+
+.red[*"I wonder what the value of the parameter $\theta$ might be?"*]
+
+* Theta $(\theta)$ is a .blue[population parameter].
+* There is no idea of what its value might be. 
+* There is no reference to compare to. 
+
+The typical inference in parameter estimation context is a .blue[**confidence interval**]
+] <!--end of panel-->
+.panel[.panel-name[Hypothesis Testing]
+
+Associated with the basic question: 
+
+.red[*"I wonder if the value of the parameter $\theta$ is ... ?"*]
+
+* Theta $(\theta)$ is a .blue[population parameter].
+* There is usually a reference to compare to, which we'll call $\theta_0$. 
+* $\theta$ might be equal to $``="$ to $\theta_0$.
+* $\theta$ might be less than $``<"$ $\theta_0$.
+* $\theta$ might be greater than $``>"$  $\theta_0$.
+
+The typical inference in a hypothesis testing context is a .blue[**p-value**]
+
+] <!--end of panel-->
+.panel[.panel-name[Prediction]
+
+Associated with the basic question: 
+
+.red[*"I wonder what a future value of $X$ might be?"*]
+
+* $X$ is .red[**not**] a .blue[population parameter].
+* There is no idea of what the value might be.
+* There is no reference to compare to. 
+* The goal is to understand what a new value might look like. 
+
+The typical inference in a prediction context is a .blue[**prediction interval**]
+] <!--end of panel-->
+.panel[.panel-name[Some Advice]
+
+It is important to understand which decision you are trying to make.
+
+* If you don't understand which decision you're interested in making, .red[it is likely that your experiment design and analysis will be inappropriate.]
+  - People using confidence intervals for hypothesis testing
+  - People not understanding why a p-value is being provided
+  - People using confidence intervals as prediction intervals
+  - People using hypothesis tests when they're really interested in making predictions
+
+.blue[**You must make sure that you understand the difference between these with clarity!!!**]
+
+You need to really nail down what your question is: what decision you're trying to make. Then you have a path moving forwards, and you know what the answer you're looking for looks like ahead of time. 
+] <!--end of panel-->
+] <!--end of panelset-->
+
+---
+
+# Uncertainty
+
+.pull-left[Since we're dealing with data we do not know what the value(s) will be before the experiment. 
+
+Hence we are .red[uncertain] about what the value will be. 
+
+Also, if we take many samples, we will be .red[uncertain] about what the values will be.
+
+We're .red[uncertain] and that's why we're doing the experiment. If you already know this information, you wouldn't be wasting resources doing an experiment.] 
+
+.pull-right[The language of uncertainty is .red[**probability**]
+
+* A rigorous mathematical framework 
+* Allows uncertainty to be quantified into a number
+* Driven by the type of experiment conducted (not the data)
+
+Any good statistician or data scientist (or scientist seeking to use statistical methods) needs to have a solid grasp of probability because everything is linked to it.
+
+Anyone who doesn't have a decent grasp of probability absolutely cannot be a Bayesian statistician. Bayesian statistics and probability are linked at a fundamental level.]
+---
+# Starting with probability
+
+Since we're going to be thinking about quantifying uncertainty we need to become familiar with the language of probability. 
+
+There are different approaches to probability:
+
+* Empirical (evidence-based)
+* Classical (equally-likely outcomes)
+* Subjective
+
+Keep in mind that our objective is to **quantify** our uncertainty using probability. 
+
+---
+
+# Empirical Probability
+
+.pull-left[The most natural way to think of our uncertainty about a phenomenon is to think about how often you have observed it. 
+
+Record how many times you have seen the outcome relative to how many times you have looked for the outcome. 
+
+Suppose that:
+* you are interested in some event $E$
+* so you go looking looking for the outcome $N$ times
+* and you observe the event occuring $n(E)$ times
+
+Then you could justifiably claim that there is an $n(E) : N$ chance of observing $E$.]
+
+.pull-right[
+### Example
+Interested in the chance of someone running a red light at a particular intersection. Set up a surveillance camera and record intersection for three hours on a given day. Review the video to find:
+
+* $N=13432$ cars passed through intersection. 
+* $n(E) = 4$ cars went through red lights, each on different light cycles. 
+
+Empirically, there is a $4 : 13432$ chance that a car that a car will run a red light. Write as fraction:
+$$
+\hat P(\text{Car runs red light})=\frac{4}{13432}\approx 0.000298
+$$]
+
+---
+*
+
+---
+# Axioms of probability
+
+---
+
+# Conditional probability
+
+---
+
+# Exchangeability and independent events
+
+---
+
+# The law of total probability
+
+---
+
+# Bayes' theorem
+
+---
+
+# 
+
+# What is statistics?
+
+Statistics is the science of learning from experience, particularly experience that arrives a little bit at a time. There are *two* main statistical theories: 
 
 --
 
-* first point
+* **Bayesianism**
 
 --
 
-* second point
+* **frequentism** 
 
 --
 
-* third point
+It is the connections and disagreements between these two theories that drives the historical philosophical development of statistics. 
+
+From an operational perspective, there two component aspects of statistical analyses irrespective of the particular statistical theory:
+
+--
+
+* **algorithmic** 
+
+--
+
+* **inferential** 
+
+The algorithmic comes first and the inferential follows behind, keeping a check on the accuracy of the former. 
+
+A crucial feature of statistics is that the same data that provides an estimate (algorithmic) is also used to asses its accuracy (inferential). 
+
+---
+
+## A simple example
+
+*Averaging* provides a simple and clear example. We observe data $y_1, y_2, \ldots, y_n$ and seek to summarize what the data indicates as typical by computing the mean using the averaging algorithm:
+
+$$
+\bar y = \frac{1}{n}\sum_{i=1}^n y_i
+$$
+
+But how accurate is the number we get back? To answer this question we invoke some probability argument and, for example, state the accuracy of the averaging algorithm in terms of its *standard error*:
+
+$$
+\widehat{\text{se}(\bar y)} = \sqrt{\sum_{i=1}^n \frac{(y_i - \bar y)^2}{n(n-1)}}.
+$$
+So averaging is the algorithm, and the standard error provides an inference of the algorithm's accuracy. The algorithm comes first and the inference follows at a second level of statistical consideration. 
+
+NB. "Inference" concerns more than accuracy: broadly speaking, algorithms say what the statistician does while inference says why they do it. 
+
+---
+
+# 
+.panelset[
+.panel[.panel-name[Frequentist]
+Content for tab1
+] <!--end of panel-->
+.panel[.panel-name[Fiducial]
+Content for tab2
+] <!--end of panel-->
+.panel[.panel-name[Bayesian]
+.pull-left[
+Pulling content to the left
+]
+.pull-right[
+Pulling content to the right
+]
+
+] <!--end of panel-->
+] <!--end of panelset-->
+
+---
+
+--
+
+* **Frequentist**
+
+--
+
+* **Fiducial** 
+
+--
+
+* **Bayesian**
+
+There are other statistical schools of thought too, but theese three are the major players. 
 
 ???
-This is an example of presenter notes
+What is Bayesian statistics? Well, to answer that first we need to go back and think about what statistics is and look at some general frameworks.
+
+---
+
+# Frequentism
+
+Frequentist statistics is the classical approach that you typically find in textbooks and implemented in most statistical software.
+
+Frequentist inference is based on what is expected to happen under a hypothetical scenario of infinite independent repeated sampling; essentially a frequentist asks what if I could repeat the experiment a very large number of time
+
+
+
 ---
 
 class: center, middle
@@ -116,4 +484,22 @@ plot(x, y, type="l")
 ]
 
 ---
+# This slide has panels
+.panelset[
+.panel[.panel-name[Tab1]
+Content for tab1
+] <!--end of panel-->
+.panel[.panel-name[Tab2]
+Content for tab2
+] <!--end of panel-->
+.panel[.panel-name[Tab3]
+.pull-left[
+Pulling content to the left
+]
+.pull-right[
+Pulling content to the right
+]
+
+] <!--end of panel-->
+] <!--end of panelset-->
 
